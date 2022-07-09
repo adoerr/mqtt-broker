@@ -1,13 +1,14 @@
+use std::str::FromStr;
+
 use crate::{
     MAX_TOPIC_LEN_BYTES, MULTI_LEVEL_WILDCARD, MULTI_LEVEL_WILDCARD_STR,
     SHARED_SUBSCRIPTION_PREFIX, SINGLE_LEVEL_WILDCARD, SINGLE_LEVEL_WILDCARD_STR, TOPIC_SEPARATOR,
 };
-use std::str::FromStr;
 
 /// A filter for subscribers to indicate which topics they want
 /// to receive messages from. Can contain wildcards.
 /// Shared topic filter example: $share/group_name_a/home/kitchen/temperature
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TopicFilter {
     Concrete { filter: String, level_count: u32 },
     Wildcard { filter: String, level_count: u32 },
@@ -17,7 +18,7 @@ pub enum TopicFilter {
 
 /// A topic name publishers use when sending MQTT messages.
 /// Cannot contain wildcards.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Topic {
     topic_name: String,
     level_count: u32,
@@ -29,7 +30,7 @@ impl Topic {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum TopicLevel<'a> {
     Concrete(&'a str),
     SingleLevelWildcard,
@@ -45,7 +46,7 @@ impl<'a> TopicLevel<'a> {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum TopicParseError {
     EmptyTopic,
     TopicTooLong,
